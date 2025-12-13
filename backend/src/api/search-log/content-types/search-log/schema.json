@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "search_logs",
+  "info": {
+    "singularName": "search-log",
+    "pluralName": "search-logs",
+    "displayName": "Search Log"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "clicked": {
+      "type": "boolean"
+    },
+    "last_visited": {
+      "type": "datetime"
+    },
+    "query": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

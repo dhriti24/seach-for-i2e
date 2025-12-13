@@ -1,0 +1,156 @@
+.main {
+  width: 100%;
+  min-height: calc(100vh - 200px);
+  background: linear-gradient(135deg, #EFF7FD 0%, #FFF 50%, #EFF7FD 100%);
+  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.main::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 139, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.main::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(153, 209, 255, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.featuresTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-blue-dark);
+  text-align: center;
+  margin: 0 0 48px 0;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.featureCard {
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 139, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+  align-items: flex-start;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 139, 255, 0.15);
+  border-color: rgba(0, 139, 255, 0.3);
+}
+
+.featureTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-blue-dark);
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.featureDescription {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  flex: 1;
+}
+
+.howToUse {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 139, 255, 0.1);
+}
+
+.howToUseTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-blue);
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.examplesList {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.8;
+  margin: 0;
+  padding-left: 20px;
+  list-style: decimal;
+}
+
+.exampleItem {
+  margin-bottom: 6px;
+}
+
+.exampleItem:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 60px 20px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .featureCard {
+    padding: 24px;
+    min-height: auto;
+  }
+
+  .featureTitle {
+    font-size: 18px;
+  }
+
+  .featureDescription {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "i2e-search-system",
+  "version": "1.0.0",
+  "description": "Intelligent Anonymous Search System for i2e Consulting",
+  "private": true,
+  "workspaces": [
+    "scraper",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "install:all": "npm install && cd scraper && npm install && cd ../backend && npm install && cd ../frontend && npm install",
+    "scraper": "cd scraper && node index.js",
+    "backend": "cd backend && npm run develop",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": ["search", "scraper", "strapi", "elasticsearch", "nextjs"],
+  "author": "",
+  "license": "MIT"
+}
+

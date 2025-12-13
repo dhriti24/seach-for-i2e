@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "search_items",
+  "info": {
+    "singularName": "search-item",
+    "pluralName": "search-items",
+    "displayName": "Search Item",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": false
+    },
+    "description": {
+      "type": "text"
+    },
+    "content": {
+      "type": "text"
+    },
+    "images": {
+      "type": "json"
+    },
+    "last_modified": {
+      "type": "datetime"
+    },
+    "category": {
+      "type": "string"
+    },
+    "page_description": {
+      "type": "text"
+    }
+  }
+}

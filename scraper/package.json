@@ -1,0 +1,24 @@
+{
+  "name": "i2e-scraper",
+  "version": "1.0.0",
+  "description": "Sitemap scraper for i2e Consulting",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
+    "node-cron": "^3.0.3",
+    "playwright": "^1.40.0",
+    "xml2js": "^0.6.2"
+  },
+  "keywords": [
+    "scraper",
+    "sitemap"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Open Sans', sans-serif;
+  color: #000;
+  background-color: #FFF;
+}
+
+/* Header height variable for fixed header spacing */
+:root {
+  --header-height: 73px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: 'Open Sans', sans-serif;
+  cursor: pointer;
+}
+
+input, textarea {
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Colors */
+:root {
+  --color-black: #000;
+  --color-white: #FFF;
+  --color-gray-dark: #272727;
+  --color-blue: #008BFF;
+  --color-blue-dark: #04014D;
+  --color-blue-light: #99D1FF;
+  --color-blue-bg: #EFF7FD;
+  --color-border: #CCE8FF;
+  --color-border-active: #008BFF;
+  --shadow: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.20));
+}
+
