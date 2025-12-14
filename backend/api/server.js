@@ -735,10 +735,27 @@ app.get('/test-strapi-key', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`[Server] API server running on port ${PORT}`);
-  console.log(`[Server] Elasticsearch: ${ELASTICSEARCH_URL}`);
-  console.log(`[Server] Strapi: ${STRAPI_URL}`);
-  console.log(`[Server] Groq API: ${process.env.GROQ_API_KEY ? 'Configured' : 'Not configured'}`);
-});
+// Initialize Elasticsearch on startup (non-blocking)
+async function startServer() {
+  try {
+    const { initializeElasticsearch } = require('./elasticsearch-init');
+    // Initialize in background - don't block server startup
+    initializeElasticsearch().catch(error => {
+      console.error('[Server] ⚠ Elasticsearch initialization failed:', error.message);
+      console.error('[Server] ⚠ Server will start but search may not work until Elasticsearch is ready');
+      console.error('[Server] ⚠ Make sure Elasticsearch is running and try restarting the API server');
+    });
+  } catch (error) {
+    console.error('[Server] ⚠ Could not load Elasticsearch initialization:', error.message);
+  }
+  
+  // Start server
+  app.listen(PORT, () => {
+    console.log(`[Server] API server running on port ${PORT}`);
+    console.log(`[Server] Elasticsearch: ${ELASTICSEARCH_URL}`);
+    console.log(`[Server] Strapi: ${STRAPI_URL}`);
+    console.log(`[Server] Groq API: ${process.env.GROQ_API_KEY ? 'Configured' : 'Not configured'}`);
+  });
+}
+
+startServer();

@@ -98,9 +98,14 @@ npm install
 
 ### Step 3: Configure Environment Variables
 
-**⚠️ Important**: Create a `.env` file in the **root directory** of the project (not in backend folder). All services (Strapi, API server, scraper) read from this single root `.env` file.
+**⚠️ Important**: You need to create **TWO `.env` files**:
 
-1. **Create `.env` file** in the root directory with the following content:
+1. **Root `.env` file** (for API server and scraper)
+2. **Backend `.env` file** (for Strapi - Groq and Strapi API keys)
+
+**Step 3a: Create Root `.env` File**
+
+Create a `.env` file in the **root directory** of the project with the following content:
 
 ```env
 # Database Configuration (Neon - Shared Cloud Database)
@@ -130,12 +135,40 @@ API_PORT=3001
 NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-2. **Replace Placeholder Values**:
-   - **Neon Connection Details**: Replace `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD` with values provided
-   - **Strapi API Key**: Replace `your_strapi_api_key_here` with the API key provided
-   - **Groq API Key**: Replace `your_groq_api_key_here` with your Groq API key (get from https://console.groq.com/)
+**Step 3b: Create Backend `.env` File**
 
-**Note**: All services automatically read from this root `.env` file. You don't need to create separate `.env` files in backend or frontend folders.
+**Important**: Strapi reads Groq and Strapi API keys from `backend/.env`. Create a `.env` file in the `backend` directory with at minimum:
+
+```env
+# Groq AI Configuration (Required for Strapi)
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# Strapi API Key (Required)
+STRAPI_API_KEY=your_strapi_api_key_here
+STRAPI_URL=http://localhost:1400
+
+# Database Configuration (Same as root .env)
+DATABASE_CLIENT=postgres
+DATABASE_HOST=ep-xxxx-xxxx.us-east-2.aws.neon.tech
+DATABASE_PORT=5432
+DATABASE_NAME=neondb
+DATABASE_USERNAME=your_neon_username
+DATABASE_PASSWORD=your_neon_password
+DATABASE_SSL=true
+```
+
+**Step 3c: Replace Placeholder Values**
+
+In **both** `.env` files, replace the placeholder values:
+- **Neon Connection Details**: Replace `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD` with values provided
+- **Strapi API Key**: Replace `your_strapi_api_key_here` with the API key provided (use same value in both files)
+- **Groq API Key**: Replace `your_groq_api_key_here` with your Groq API key (use same value in both files)
+
+**Note**: 
+- Root `.env` is used by the API server and scraper
+- Backend `.env` is used by Strapi (especially for Groq and Strapi API keys)
+- You can copy the same values to both files, or create a symlink if preferred
 
 ### Step 4: Set Up Elasticsearch
 
@@ -198,6 +231,16 @@ cd backend
 npm run api
 ```
 - Wait for: "API server running on port 3001"
+- **Important**: The API server will automatically:
+  - Create Elasticsearch index if it doesn't exist
+  - Sync data from Strapi to Elasticsearch
+- Look for these messages in the console:
+  ```
+  [Elasticsearch] ✓ Connection successful
+  [Elasticsearch] ✓ Index 'search_items' created successfully
+  [Elasticsearch] ✓ Successfully indexed X items
+  [Elasticsearch] ✓ Initialization complete
+  ```
 - API: http://localhost:3001
 - Health check: http://localhost:3001/health (should return `{"status":"ok"}`)
 
@@ -217,7 +260,12 @@ npm run dev
    - Frontend: http://localhost:3000 (homepage with search bar)
    - Elasticsearch: http://localhost:9200 (JSON response)
 
-2. **Test Search:**
+2. **Check Elasticsearch Initialization:**
+   - Look for initialization messages in the API server console
+   - Should see: `[Elasticsearch] ✓ Initialization complete`
+   - If you see errors, check that Strapi is running and Elasticsearch is accessible
+
+3. **Test Search:**
    - Open http://localhost:3000
    - Type a search query in the search bar
    - Verify results appear
@@ -481,22 +529,41 @@ npm run api
    - For Elasticsearch 8+, check security settings in `config/elasticsearch.yml`
    - Ensure `bin/elasticsearch` (Linux/macOS) or `bin\elasticsearch.bat` (Windows) has started
 
-4. **Strapi API Key Issues**
+4. **Elasticsearch Space/Disk Error**
+   - **Error**: "No space left on device" or disk space warnings
+   - **Solution**: Move Elasticsearch installation to a drive with more space (e.g., D drive on Windows)
+   - **Steps**:
+     1. Stop Elasticsearch if it's running
+     2. Copy the entire Elasticsearch directory to `D:\elasticsearch` (or another drive with more space)
+     3. Update any shortcuts or scripts to point to the new location
+     4. Start Elasticsearch from the new location: `D:\elasticsearch\bin\elasticsearch.bat`
+     5. Verify it's running: http://localhost:9200
+   - **Alternative**: Free up space on the current drive or configure Elasticsearch to use a different data directory
+
+5. **Strapi API Key Issues**
    - Verify API key is correct in `.env` file
    - Check API key in Strapi admin: **Settings** → **API Tokens**
    - Restart Express API server after updating API key
 
-5. **Groq API Errors**
+6. **Groq API Errors**
    - Verify API key is correct in `.env`
    - Check API key has credits/quota
    - Verify model name is correct
 
-6. **No Search Results**
-   - Ensure Strapi has content (search-items)
-   - Check content is published in Strapi
-   - Verify Elasticsearch has indexed content
-   - Check API server logs for errors
-   - Restart Strapi to trigger re-indexing
+7. **No Search Results / Elasticsearch Indexing Issues**
+   - **Index doesn't exist**: The API server automatically creates the index on startup
+   - **Check initialization**: Look for `[Elasticsearch] ✓ Initialization complete` in API server logs
+   - **If index creation fails**: 
+     - Ensure Elasticsearch is running: http://localhost:9200
+     - Ensure Strapi is running and accessible
+     - Check that `STRAPI_API_KEY` is set correctly in `.env`
+     - Restart the API server - it will retry initialization
+   - **If data sync fails**:
+     - Verify Strapi has content (search-items)
+     - Check content is published in Strapi
+     - Verify `STRAPI_API_KEY` is valid
+     - Check API server logs for specific error messages
+   - **Manual re-sync**: Restart the API server to trigger re-initialization
 
 ---
 
