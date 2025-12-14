@@ -230,7 +230,7 @@ npm run develop
 ```
 - Wait for: "Server started" message
 - Strapi admin: http://localhost:1400/admin
-- **Login**: Use provided Strapi admin credentials
+- **Login**: Use provided Strapi admin credentials from .env file to login
 - API: http://localhost:1400/api
 
 **Terminal 3 - Express API Server:**
