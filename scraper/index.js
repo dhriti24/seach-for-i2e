@@ -7,7 +7,7 @@ const xml2js = require('xml2js');
 const { promisify } = require('util');
 const parseXML = promisify(xml2js.parseString);
 
-const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1400';
 const STRAPI_API_KEY = process.env.STRAPI_API_KEY;
 const ELASTICSEARCH_URL = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
 const ROBOTS_URL = process.env.ROBOTS_URL || 'https://i2e-website-dev-nextjs.azurewebsites.net/robots.txt';

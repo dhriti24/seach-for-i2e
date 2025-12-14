@@ -21,7 +21,7 @@ A full-featured AI-powered search system with intelligent query understanding, a
 - All scraped content and AI summaries are stored in the **shared Neon database**
 - The system is ready to use immediately - no live scraping required
 
-**Skip any data entry instructions** - the database is ready to use. Simply follow the installation steps, update `.env` with Neon connection details, and use the provided credentials to access Strapi at http://localhost:1337/admin.
+**Skip any data entry instructions** - the database is ready to use. Simply follow the installation steps, update `.env` with Neon connection details, and use the provided credentials to access Strapi at http://localhost:1400/admin.
 
 ## 🏗️ Architecture
 
@@ -96,7 +96,48 @@ npm install
 
 **Note for Windows Users**: If you encounter permission errors, run PowerShell or Command Prompt as Administrator.
 
-### Step 3: Set Up Elasticsearch
+### Step 3: Configure Environment Variables
+
+**⚠️ Important**: Create a `.env` file in the **root directory** of the project (not in backend folder). All services (Strapi, API server, scraper) read from this single root `.env` file.
+
+1. **Create `.env` file** in the root directory with the following content:
+
+```env
+# Database Configuration (Neon - Shared Cloud Database)
+DATABASE_CLIENT=postgres
+DATABASE_HOST=ep-xxxx-xxxx.us-east-2.aws.neon.tech
+DATABASE_PORT=5432
+DATABASE_NAME=neondb
+DATABASE_USERNAME=your_neon_username
+DATABASE_PASSWORD=your_neon_password
+DATABASE_SSL=true
+
+# Strapi Configuration
+STRAPI_URL=http://localhost:1400
+STRAPI_API_KEY=your_strapi_api_key_here
+
+# Elasticsearch Configuration
+ELASTICSEARCH_URL=http://localhost:9200
+
+# Groq AI Configuration
+GROQ_API_KEY=your_groq_api_key_here
+GROQ_MODEL=llama-3.3-70b-versatile
+
+# API Server Configuration
+API_PORT=3001
+
+# Frontend Configuration (optional, defaults shown)
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+2. **Replace Placeholder Values**:
+   - **Neon Connection Details**: Replace `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USERNAME`, `DATABASE_PASSWORD` with values provided
+   - **Strapi API Key**: Replace `your_strapi_api_key_here` with the API key provided
+   - **Groq API Key**: Replace `your_groq_api_key_here` with your Groq API key (get from https://console.groq.com/)
+
+**Note**: All services automatically read from this root `.env` file. You don't need to create separate `.env` files in backend or frontend folders.
+
+### Step 4: Set Up Elasticsearch
 
 1. **Configure Security Settings** (Required for Elasticsearch 8+)
    
@@ -130,28 +171,37 @@ npm install
    - You should see a JSON response with cluster information
    - If you see authentication errors, the security settings weren't disabled correctly
 
-### Step 4: Start All Services
+### Step 5: Start All Services
 
-You'll need **three separate terminal windows**:
+**⚠️ Important**: Start services in this order for proper initialization:
 
-**Terminal 1 - Strapi Backend:**
+**Terminal 1 - Elasticsearch (START THIS FIRST):**
+- Make sure Elasticsearch is running: http://localhost:9200
+- If not running, navigate to your Elasticsearch installation directory
+- Run: `bin/elasticsearch` (Linux/macOS) or `bin\elasticsearch.bat` (Windows)
+- Wait for "started" message in the console
+- Verify: Open http://localhost:9200 in browser (should show JSON response)
+
+**Terminal 2 - Strapi Backend:**
 ```bash
 cd backend
 npm run develop
 ```
 - Wait for: "Server started" message
-- Strapi admin: http://localhost:1337/admin
-- API: http://localhost:1337/api
+- Strapi admin: http://localhost:1400/admin
+- API: http://localhost:1400/api
+- **Login**: Use provided Strapi admin credentials
 
-**Terminal 2 - Express API Server:**
+**Terminal 3 - Express API Server:**
 ```bash
 cd backend
 npm run api
 ```
 - Wait for: "API server running on port 3001"
 - API: http://localhost:3001
+- Health check: http://localhost:3001/health (should return `{"status":"ok"}`)
 
-**Terminal 3 - Frontend:**
+**Terminal 4 - Frontend:**
 ```bash
 cd frontend
 npm run dev
@@ -159,10 +209,10 @@ npm run dev
 - Wait for: "Ready on http://localhost:3000"
 - Frontend: http://localhost:3000
 
-### Step 5: Verify Installation
+### Step 6: Verify Installation
 
 1. **Check All Services are Running:**
-   - Strapi: http://localhost:1337/admin (login page)
+   - Strapi: http://localhost:1400/admin (login page)
    - Express API: http://localhost:3001/health (should return `{"status":"ok"}`)
    - Frontend: http://localhost:3000 (homepage with search bar)
    - Elasticsearch: http://localhost:9200 (JSON response)
@@ -174,48 +224,7 @@ npm run dev
 
 ---
 
-## ⚙️ Environment Variables Setup
-
-### Create `.env` File
-
-Create a `.env` file in the **root directory** of the project with the following content:
-
-```env
-# Database Configuration (Neon - Shared Cloud Database)
-DATABASE_CLIENT=postgres
-DATABASE_HOST=ep-xxxx-xxxx.us-east-2.aws.neon.tech
-DATABASE_PORT=5432
-DATABASE_NAME=neondb
-DATABASE_USERNAME=your_neon_username
-DATABASE_PASSWORD=your_neon_password
-DATABASE_SSL=true
-
-# Strapi Configuration
-STRAPI_URL=http://localhost:1337
-STRAPI_API_KEY=your_strapi_api_key_here
-
-# Elasticsearch Configuration
-ELASTICSEARCH_URL=http://localhost:9200
-
-# Groq AI Configuration
-GROQ_API_KEY=your_groq_api_key_here
-GROQ_MODEL=llama-3.3-70b-versatile
-
-# API Server Configuration
-API_PORT=3001
-
-# Frontend Configuration (optional, defaults shown)
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-### Replace Placeholder Values
-
-**Important**: Replace the placeholder values with the details provided:
-- **Neon Connection Details**: Host, Database Name, Username, Password (from Neon dashboard)
-- `your_strapi_api_key_here`: Strapi CMS API key (provided)
-- `your_groq_api_key_here`: Groq API key from console.groq.com (optional, for AI features)
-
-### Environment Variables Reference
+## ⚙️ Environment Variables Reference
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
@@ -226,7 +235,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 | `DATABASE_USERNAME` | Database username | Yes | - |
 | `DATABASE_PASSWORD` | Database password | Yes | - |
 | `DATABASE_SSL` | Enable SSL | Yes | `true` |
-| `STRAPI_URL` | Strapi CMS URL | Yes | `http://localhost:1337` |
+| `STRAPI_URL` | Strapi CMS URL | Yes | `http://localhost:1400` |
 | `STRAPI_API_KEY` | Strapi API token | Yes | - |
 | `ELASTICSEARCH_URL` | Elasticsearch URL | Yes | `http://localhost:9200` |
 | `GROQ_API_KEY` | Groq AI API key | Yes | - |
@@ -373,21 +382,54 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ## 🚦 Running the Application
 
-### Development Mode
+### Quick Start (After Initial Setup)
 
-**Terminal 1 - Strapi:**
+Once you've completed the installation steps, you can start all services:
+
+**1. Start Elasticsearch** (if not already running):
+```bash
+# Navigate to your Elasticsearch installation directory
+bin/elasticsearch  # Linux/macOS
+bin\elasticsearch.bat  # Windows
+```
+
+**2. Start Strapi Backend:**
 ```bash
 cd backend
 npm run develop
 ```
 
-**Terminal 2 - Express API:**
+**3. Start Express API Server:**
 ```bash
 cd backend
 npm run api
 ```
 
-**Terminal 3 - Frontend:**
+**4. Start Frontend:**
+```bash
+cd frontend
+npm run dev
+```
+
+### Development Mode
+
+**Terminal 1 - Elasticsearch:**
+- Start Elasticsearch from installation directory
+- Verify: http://localhost:9200
+
+**Terminal 2 - Strapi:**
+```bash
+cd backend
+npm run develop
+```
+
+**Terminal 3 - Express API:**
+```bash
+cd backend
+npm run api
+```
+
+**Terminal 4 - Frontend:**
 ```bash
 cd frontend
 npm run dev
@@ -422,7 +464,7 @@ npm run api
 ### Common Issues
 
 1. **Port Already in Use**
-   - Strapi (1337): Check if Strapi is already running
+   - Strapi (1400): Check if Strapi is already running
    - Express API (3001): Check if another process is using port 3001
    - Frontend (3000): Check if another Next.js app is running
    - Elasticsearch (9200): Check if Elasticsearch is already running

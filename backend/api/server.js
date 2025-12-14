@@ -34,7 +34,7 @@ const {
 
 const app = express();
 const PORT = process.env.API_PORT || 3001;
-const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
+const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1400';
 const STRAPI_API_KEY_RAW = process.env.STRAPI_API_KEY || '';
 const ELASTICSEARCH_URL = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
 
@@ -463,7 +463,7 @@ app.post('/log/click', async (req, res) => {
       );
     } catch (strapiError) {
       if (strapiError.response && strapiError.response.status === 401) {
-        console.error('[Log Click] 401 Unauthorized - Check STRAPI_API_KEY in backend/.env');
+        console.error('[Log Click] 401 Unauthorized - Check STRAPI_API_KEY in root .env file');
         return res.json({ success: false, error: 'Failed to log (auth error)' });
       }
       throw strapiError;
@@ -517,7 +517,7 @@ app.post('/log/click', async (req, res) => {
       res.json({ success: true });
     } catch (strapiError) {
       if (strapiError.response && strapiError.response.status === 401) {
-        console.error('[Log Click] 401 Unauthorized - Check STRAPI_API_KEY in backend/.env');
+        console.error('[Log Click] 401 Unauthorized - Check STRAPI_API_KEY in root .env file');
         return res.json({ success: false, error: 'Failed to log (auth error)' });
       }
       throw strapiError;

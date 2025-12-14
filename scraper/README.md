@@ -25,7 +25,7 @@ cp .env.example .env
 
 3. Update `.env` with your configuration:
 ```
-STRAPI_URL=http://localhost:1337
+STRAPI_URL=http://localhost:1400
 STRAPI_API_KEY=your_strapi_api_key
 ELASTICSEARCH_URL=http://localhost:9200
 ROBOTS_URL=https://i2econsulting.com/robots.txt
