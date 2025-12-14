@@ -103,9 +103,11 @@ npm install
 1. **Root `.env` file** (for API server and scraper)
 2. **Backend `.env` file** (for Strapi - Groq and Strapi API keys)
 
-**Step 3a: Create Root `.env` File**
+**Step 3a: Upload Root `.env` File**
 
-Create a `.env` file in the **root directory** of the project with the following content:
+Upload the provided `.env` file from OneDrive to the **root directory** of the project.
+
+If you need to create it manually, use the following template:
 
 ```env
 # Database Configuration (Neon - Shared Cloud Database)
@@ -135,9 +137,11 @@ API_PORT=3001
 NEXT_PUBLIC_API_URL=http://localhost:3001
 ```
 
-**Step 3b: Create Backend `.env` File**
+**Step 3b: Upload Backend `.env` File**
 
-**Important**: Strapi reads Groq and Strapi API keys from `backend/.env`. Create a `.env` file in the `backend` directory with at minimum:
+**Important**: Strapi reads Groq and Strapi API keys from `backend/.env`. Upload the same `.env` file from OneDrive to the `backend` directory.
+
+If you need to create it manually, use the following template:
 
 ```env
 # Groq AI Configuration (Required for Strapi)
