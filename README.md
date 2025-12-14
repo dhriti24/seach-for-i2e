@@ -2,6 +2,10 @@
 
 A full-featured AI-powered search system with intelligent query understanding, autocomplete suggestions, category filtering, and user history tracking. The system uses Strapi CMS as the data source and Elasticsearch for fast, relevant search results.
 
+## 🎥 Demo Video
+
+Watch the demo video to see the system in action: [Demo Video](https://www.youtube.com/watch?v=atnVZQAREjw)
+
 ## 🎯 For Hackathon Judges
 
 **Important**: The Strapi database is **already populated with data** in a **shared Neon cloud database**. You will be provided with:
